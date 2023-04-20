@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include <stdexcept>
+#include <exception>
 #include "Node.h"
 //예시: 연결리스트의 추상자료형
 //1. 모든 데이터 출력
@@ -26,9 +26,9 @@ public:
 	void PrintAll();
 	void ClearAll(); //Delete 구현 후 사용
 	void InsertLast(T _newdata);
-	void DeleteAt(int _newindex);
-	void DeleteLast();
-	void GetNodeAt(int index);
+	T DeleteAt(int _newindex);
+	T DeleteLast();
+	T GetNodeAt(int index);
 private:
 	Node<T>* head;  // 연결리스트의 시작노드를 가르키는 헤드
 	int count;		// 총 노드의 수를 저장하는 값
@@ -42,8 +42,7 @@ inline void LinkedList<T>::InsertAt(int index, T _data) // 1
 {
 	if (index > ReturnCount() || index < 0)
 	{
-		cout << "범위 초과" << endl;
-		return;
+		throw std::invalid_argument("범위를 초과함");
 	}
 	Node<T>*  newNode = new Node<T>(_data, nullptr);
 	//newNode->data = _data; 
@@ -107,13 +106,12 @@ inline void LinkedList<T>::InsertLast(T _newdata)
 }
 
 template<class T>
-inline void LinkedList<T>::DeleteAt(int index)
+inline T LinkedList<T>::DeleteAt(int index)
 {
 	// 음수 또는 리스트 크기를 넘어가는 index 
 	if (index > ReturnCount() || index < 0)
 	{
-		cout << "범위 초과" << endl;
-		return;
+		throw std::invalid_argument("범위를 초과함");
 	}
 	Node<T>* currentNode = this->head;
 	// 1). 첫번째 노드를 제거하는 상황과
@@ -126,7 +124,7 @@ inline void LinkedList<T>::DeleteAt(int index)
 		
 		delete deletedNode;
 		this->count--;
-		cout << "삭제된 노드의 데이터: " << _data << endl;
+		return _data;
 	}
 	else
 	{
@@ -139,30 +137,29 @@ inline void LinkedList<T>::DeleteAt(int index)
 		currentNode->SetLink(deletedNode->ReturnLink()); 
 		delete deletedNode;
 		this->count--;
-		cout << "삭제된 노드의 데이터: " << _data << endl;
+		return _data;
 	}
 
 }
 
 template<class T>
-inline void LinkedList<T>::DeleteLast()
+inline T LinkedList<T>::DeleteLast()
 {
-	DeleteAt(this->count - 1);
+	return DeleteAt(this->count - 1);
 
 }
 
 template<class T>
-inline void LinkedList<T>::GetNodeAt(int index)
+inline T LinkedList<T>::GetNodeAt(int index)
 {
 	if (index > ReturnCount() || index < 0)
 	{
-		cout << "범위 초과" << endl;
-		return;
+		throw std::invalid_argument("범위를 초과함");
 	}
 	Node<T>* currentNode = this->head;
 	for (int i = 0; i < index; i++)// 목표 index 전까지 이동
 	{
 		currentNode = currentNode->ReturnLink();
 	}// 목표 index 도착
-	cout << "해당 인덱스의 값은: " << currentNode->ReturnData() << endl;
+	return currentNode->ReturnData();
 }

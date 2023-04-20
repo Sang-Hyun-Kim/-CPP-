@@ -1,6 +1,6 @@
 #include <iostream>
 #include "LinkedList.h"
-
+#include "Stack.h"
 
 int main()
 {
@@ -38,4 +38,30 @@ int main()
 	list1.PrintAll();
 	list1.GetNodeAt(list1.ReturnCount()-1);
 	list1.GetNodeAt(list1.ReturnCount() - 2);
+	cout << "------------------------------------" << endl;
+	Stack<int> stack1;
+	cout << boolalpha;
+	cout << "IsEmpty½ÇÇà°á°ú: " << stack1.IsEmpty() << endl;
+	stack1.Push(9);
+	stack1.Push(6);
+	stack1.Push(0);
+	stack1.Push(3);
+	stack1.Push(2);
+	stack1.Push(2);
+	
+	cout << "IsEmpty½ÇÇà°á°ú: " << stack1.IsEmpty() << endl;
+	cout << "ÇÈ: " << stack1.Peek() << endl;
+	cout << "ÆË: " << stack1.Pop() << endl;
+	cout << "ÇÈ: " << stack1.Peek() << endl;
+	cout << "ÆË: " << stack1.Pop() << endl;
+	cout << "ÇÈ: " << stack1.Peek() << endl;
+	cout << "ÆË: " << stack1.Pop() << endl;
+	cout << "ÇÈ: " << stack1.Peek() << endl;
+	cout << "ÆË: " << stack1.Pop() << endl;
+	cout << "ÇÈ: " << stack1.Peek() << endl;
+	cout << "ÆË: " << stack1.Pop() << endl;
+	cout << "ÆË: " << stack1.Pop() << endl; // ÆË 6¹ø
+	cout << "------------------------------------" << endl;
+	cout << "IsEmpty½ÇÇà°á°ú: " << stack1.IsEmpty() << endl;
+
 }

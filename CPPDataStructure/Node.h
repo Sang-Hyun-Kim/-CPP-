@@ -1,5 +1,6 @@
 #pragma once
-
+#include <iostream>
+#include <stdexcept>
 //예시: 연결리스트의 추상자료형
 //1. 모든 데이터 출력
 //2. 모든 데이터 제거
