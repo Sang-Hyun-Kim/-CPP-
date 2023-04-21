@@ -2,6 +2,7 @@
 #include <iostream>
 #include <exception>
 #include "Node.h"
+#include <optional>
 // 이중 연결리스트 만들기
 // 기존 단방향 연결리스트를 복사한다음 수정한다.
 // head말고 tail도 만들고
@@ -17,7 +18,7 @@ public:
 	void SetHead(Node<T>* _newhead) { this->head = _newhead; }
 	void SetTail(Node<T>* _newtail) { this->tail = _newtail; }
 	Node<T>* ReturnHead() { return this->head; }
-	Node<T>* ReturnTail() { return this->tail; }
+	optional<Node<T>*> ReturnTail();
 	/*void PlusCount() { this->count++; }
 	void MinusCount() { this->count--; }*/
 	int ReturnCount() { return this->count; }
@@ -35,6 +36,20 @@ private:
 	int count;		// 총 노드의 수를 저장하는 값
 
 };
+
+template<class T>
+inline optional<Node<T>*> DLL<T>::ReturnTail()
+{
+	if (this->tail == nullptr)
+	{
+		throw  std::invalid_argument("큐가 비어있음");
+		
+	}
+	else
+	{
+		return this->tail;
+	}
+}
 
 // 연결리스트의 특정 인덱스 위치에 삽입하려는 함수
 // 음수 위치나, 연결리스트보다 지금 크기보다 큰 값을 삽입하려하면 에러 반환
@@ -103,6 +118,7 @@ inline void DLL<T>::InsertAt(int index, T _data) // 1
 	}
 	// 하나가 새로 삽입되었으면 전체 수를 증가
 	this->count++;
+
 }
 
 template<class T>
@@ -125,11 +141,6 @@ inline void DLL<T>::PrintAll() // 7
 
 }
 
-template<class T>
-inline void DLL<T>::ClearAll()
-{
-
-}
 
 template<class T>
 inline void DLL<T>::InsertLast(T _newdata)
@@ -162,9 +173,10 @@ inline T DLL<T>::DeleteAt(int index)
 		{
 			this->head = this->head->ReturnNext(); // head는 head의 다음 노드를 가르킴
 			this->head->SetPrev(nullptr); // 새로운 head가 된 node의 이전 연결을 끊어줘야 함
-			 
+			
+		//
 		}
-		this->head = this->head->ReturnNext(); // 헤드는 원래 노드의 다음 링크로 연결
+		
 
 		delete deletedNode; // 동적할당 해제
 		

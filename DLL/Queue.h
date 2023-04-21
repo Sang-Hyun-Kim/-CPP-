@@ -2,7 +2,7 @@
 #include "DLL.h"
 #include "Node.h"
 #include <exception>
-
+#include <optional>// C++17 이상에서 std 포함됨
 
 // Queue 구현하기
 // 1. Enqueue()
@@ -15,8 +15,8 @@ class Queue
 public:
 	Queue() {};
 	void Enqueue(T _data);
-	T Dequeue();
-	T Front();
+	optional<T> Dequeue();
+	optional<T> Front();
 	bool IsEmpty();
 private:
 	DLL<T> dll;
@@ -29,8 +29,10 @@ inline void Queue<T>::Enqueue(T _data)
 }
 
 template<class T>
-inline T Queue<T>::Dequeue()
+inline optional<T> Queue<T>::Dequeue()
 {
+	/*T _data; // 오류 발생하면 어떻게든 반환값을 반환하려는 T Dequeue()를 수정하려고
+				// C++ 17의 optional 라이브러리를 알게되어 사용해봤다.
 	try {
 		return this->dll.DeleteLast();
 	}
@@ -38,19 +40,41 @@ inline T Queue<T>::Dequeue()
 	{
 		std::cout << "오류 발생: " << e.what() << endl;
 	}
-	
+	*/
+	try {
+		T data = this->dll.DeleteLast();
+		return data;
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "오류 발생: " << e.what() << endl;
+		return std::nullopt;
+	}
 }
 
 template<class T>
-inline T Queue<T>::Front()
+inline optional<T> Queue<T>::Front()
 {
 	try {
-		return this->dll.ReturnTail()->ReturnData();
+		optional<Node<T>*> nodelink;
+		nodelink = this->dll.ReturnTail();
+		if (nodelink)
+		{
+			T data = nodelink.value()->ReturnData();
+			return data;
+		}
+		else
+		{
+			return std::nullopt;
+		}
+		//T data = this->dll.ReturnTail()->ReturnData();
 		
 	}
-	catch (const exception& e)
+	catch (const std::exception& e)
 	{
 		std::cout << "오류 발생: " << e.what() << endl;
+		return std::nullopt;// 오류 발생하면 어떻게든 반환값을 반환하려는 T Dequeue()를 수정하려고
+		// C++ 17의 optional 라이브러리를 알게되어 사용해봤다.
 	}
 }
 
