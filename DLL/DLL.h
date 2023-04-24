@@ -25,7 +25,8 @@ public:
 	void InsertAt(int index, T _count);
 	//void Init() { this->count = 0; this->head = nullptr; }
 	void PrintAll();
-	void ClearAll(); //Delete 구현 후 사용
+	void PrintAll_Rev();
+	//void ClearAll(); //Delete 구현 후 사용
 	void InsertLast(T _newdata);
 	T DeleteAt(int _newindex);
 	T DeleteLast();
@@ -82,6 +83,7 @@ inline void DLL<T>::InsertAt(int index, T _data) // 1
 		newNode->SetNext(nullptr);
 		newNode->SetPrev(this->tail);// 기존 마지막 노드를 가리킴
 		this->tail->SetNext(newNode);
+		// 해당 코드는 insertLast()를 직접 짜보면서 동일 수행을함
 		
 	}
 	else // 2) newNode가 index번째 노드가 되려면
@@ -141,18 +143,57 @@ inline void DLL<T>::PrintAll() // 7
 
 }
 
+template<class T>
+inline void DLL<T>::PrintAll_Rev()
+{
+
+	// index를 link를 통해 순회하면서 출력, 마지막 값일때 끝냄
+	Node<T>* currentNode = this->tail;
+	cout << "list 내부 값 출력: " << endl;
+	cout << " [ ";
+	while (currentNode != nullptr)
+	{
+		cout << currentNode->ReturnData();
+		currentNode = currentNode->ReturnPrev();
+		if (currentNode != nullptr)
+		{
+			cout << " <- ";
+		}
+	}
+	cout << " ]" << endl;
+
+}
+
 
 template<class T>
 inline void DLL<T>::InsertLast(T _newdata)
 {
-	this->InsertAt(this->count, _newdata);
+	
+	//this->InsertAt(this->count, _newdata);
+	// 이렇게 하면 결국 순회해야하지않나? 하고 수정해보자
+	// inserat 에도 tail위치 조건문을 넣긴함
+	Node<T>* newNode = new Node<T>(_newdata, nullptr, nullptr);
+
+	if (this->head == nullptr)// 비어있는 리스트일 경우
+	{
+		this->head = newNode;
+		this->tail = newNode;
+
+	}
+	else
+	{
+		newNode->SetPrev(this->tail);
+		this->tail->SetNext(newNode);
+		this->tail = newNode;
+	}
+	this->count++;
 }
 
 template<class T>
 inline T DLL<T>::DeleteAt(int index)
 {
 	// 음수 또는 리스트 크기를 넘어가는 index 
-	if (index > ReturnCount() || index < 0)
+	if (index >= ReturnCount() || index < 0)
 	{
 		throw std::invalid_argument("범위를 초과함");
 	}
@@ -216,7 +257,6 @@ template<class T>
 inline T DLL<T>::DeleteLast()
 {
 	return DeleteAt(this->count - 1);
-
 }
 
 template<class T>

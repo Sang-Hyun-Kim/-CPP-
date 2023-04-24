@@ -18,6 +18,8 @@ public:
 	optional<T> Dequeue();
 	optional<T> Front();
 	bool IsEmpty();
+	void PrintAll();
+	
 private:
 	DLL<T> dll;
 };
@@ -82,6 +84,12 @@ template<class T>
 inline bool Queue<T>::IsEmpty()
 {
 	return (this->dll.ReturnCount() == 0);
+}
+
+template<class T>
+inline void Queue<T>::PrintAll()
+{
+	this->dll.PrintAll_Rev();
 }
 
 
